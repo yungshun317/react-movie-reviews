@@ -53,13 +53,13 @@ const average = (arr) =>
 const API_KEY = "47335132";
 
 export default function App() {
-  const [movies, setMovies] = useState(tempMovieData);
-  const [watched, setWatched] = useState(tempWatchedData);
+  const [movies, setMovies] = useState([]);
+  const [watched, setWatched] = useState([]);
 
-  // Introduce a side effect into the component's render logic
+  // Set the state in the render logic will immediately cause the component to re-render itself again, so basically we are running an infinite number of requests
   fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=${API_KEY}&s=interstellar`)
       .then((res) => res.json())
-      .then((data) => console.log(data));
+      .then((data) => setMovies(data.Search));
 
   return (
       <>
