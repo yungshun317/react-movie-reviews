@@ -1,4 +1,4 @@
-import { useState } from "react";
+import {useEffect, useState} from "react";
 
 const tempMovieData = [
   {
@@ -56,10 +56,26 @@ export default function App() {
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
 
-  // Set the state in the render logic will immediately cause the component to re-render itself again, so basically we are running an infinite number of requests
-  fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=${API_KEY}&s=interstellar`)
-      .then((res) => res.json())
-      .then((data) => setMovies(data.Search));
+  useEffect(function() {
+      fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=${API_KEY}&s=interstellar`)
+          .then((res) => res.json())
+          .then((data) => setMovies(data.Search));
+  }, []);
+  /*
+  (10) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
+    0: {Title: 'Interstellar', Year: '2014', imdbID: 'tt0816692', Type: 'movie', Poster: 'https://m.media-amazon.com/images/M/MV5BZjdkOTU3MD…WIyODZiXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_SX300.jpg'}
+    1: {Title: 'The Science of Interstellar', Year: '2015', imdbID: 'tt4415360', Type: 'movie', Poster: 'https://m.media-amazon.com/images/M/MV5BMDFhNzU4MT…WU4OTkzXkEyXkFqcGdeQXVyNDQ2MTMzODA@._V1_SX300.jpg'}
+    2: {Title: 'Interstellar Wars', Year: '2016', imdbID: 'tt5083736', Type: 'movie', Poster: 'https://m.media-amazon.com/images/M/MV5BMzE5MmExYz…2ltYWdlXkEyXkFqcGdeQXVyNTM3MDMyMDQ@._V1_SX300.jpg'}
+    3: {Title: 'Lolita from Interstellar Space', Year: '2014', imdbID: 'tt3506492', Type: 'movie', Poster: 'https://m.media-amazon.com/images/M/MV5BNDI1MmJmYW…WQ1YmIyXkEyXkFqcGdeQXVyNjQ2MjQ5NzM@._V1_SX300.jpg'}
+    4: {Title: "Interstellar: Nolan's Odyssey", Year: '2014', imdbID: 'tt4172224', Type: 'movie', Poster: 'https://m.media-amazon.com/images/M/MV5BNjc4ZjkyZm…zliYmIwXkEyXkFqcGdeQXVyMjc5MDg0NDc@._V1_SX300.jpg'}
+    5: {Title: 'Interstellar Civil War: Shadows of the Empire', Year: '2017', imdbID: 'tt5056352', Type: 'movie', Poster: 'https://m.media-amazon.com/images/M/MV5BMDJmYjQ4Ym…WJkZjk2XkEyXkFqcGdeQXVyMzM1MjQzNTk@._V1_SX300.jpg'}
+    6: {Title: "Inside 'Interstellar'", Year: '2015', imdbID: 'tt5297406', Type: 'movie', Poster: 'https://m.media-amazon.com/images/M/MV5BYzNhZjBmNm…2ltYWdlXkEyXkFqcGdeQXVyNjE0OTE2MDY@._V1_SX300.jpg'}
+    7: {Title: 'Transformers: Interstellar', Year: '2014–2015', imdbID: 'tt6046050', Type: 'series', Poster: 'https://m.media-amazon.com/images/M/MV5BMGYxMmM0ZW…jlkMWY4XkEyXkFqcGdeQXVyNTY3NjQzNjM@._V1_SX300.jpg'}
+    8: {Title: 'Interstellar', Year: '2005', imdbID: 'tt0758429', Type: 'movie', Poster: 'https://m.media-amazon.com/images/M/MV5BMTgyNzUyMTQ3OV5BMl5BanBnXkFtZTgwNDg0OTE2MzE@._V1_SX300.jpg'}
+    9: {Title: 'Interstellar Ranger Commence', Year: '2022–', imdbID: 'tt11236038', Type: 'series', Poster: 'https://m.media-amazon.com/images/M/MV5BMjk4MWQyZj…zQzMmJmXkEyXkFqcGdeQXVyOTgwMDkwNzY@._V1_SX300.jpg'}
+    length: 10
+    [[Prototype]]: Array(0)
+  */
 
   return (
       <>
