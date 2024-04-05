@@ -57,26 +57,32 @@ export default function App() {
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const query = "interstellar";
+  const query = "xasedrgnyffg";
 
   useEffect(function() {
       async function fetchMovies() {
           try {
               setIsLoading(true);
               const res = await fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=${API_KEY}&s=${query}`);
-
               if (!res.ok) throw new Error("Something went wrong with fetching movies!");
 
               const data = await res.json();
-              setMovies(data.Search);
-              setIsLoading(false);
+              if (data.Response === "False") throw new Error("Movie not found!");
 
+              // If there is no movie returned, see how `res.json()` looks like
+              // console.log(data);
+              // {Response: 'False', Error: 'Movie not found!'}
+
+              setMovies(data.Search);
+              
               // console.log(movies);
               // []
               // Because the function is asynchronous, we get the stale state (empty array)
           } catch (err) {
               console.error(err.message);
               setError(err.message);
+          } finally {
+              setIsLoading(false);
           }
       }
       fetchMovies();
