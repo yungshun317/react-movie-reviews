@@ -55,13 +55,21 @@ const API_KEY = "47335132";
 export default function App() {
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
+  const query = "interstellar";
 
   useEffect(function() {
-      fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=${API_KEY}&s=interstellar`)
-          .then((res) => res.json())
-          .then((data) => setMovies(data.Search));
+      async function fetchMovies() {
+          const res = await fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=${API_KEY}&s=${query}`);
+          const data = await res.json();
+          setMovies(data.Search);
+          console.log(movies);
+          // []
+          // Because the function is asynchronous, we get the stale state (empty array)
+      };
+      fetchMovies();
   }, []);
   /*
+  console.log(data.Search);
   (10) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
     0: {Title: 'Interstellar', Year: '2014', imdbID: 'tt0816692', Type: 'movie', Poster: 'https://m.media-amazon.com/images/M/MV5BZjdkOTU3MD…WIyODZiXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_SX300.jpg'}
     1: {Title: 'The Science of Interstellar', Year: '2015', imdbID: 'tt4415360', Type: 'movie', Poster: 'https://m.media-amazon.com/images/M/MV5BMDFhNzU4MT…WU4OTkzXkEyXkFqcGdeQXVyNDQ2MTMzODA@._V1_SX300.jpg'}
