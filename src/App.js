@@ -53,17 +53,18 @@ const average = (arr) =>
 const API_KEY = "47335132";
 
 export default function App() {
+  const [query, setQuery] = useState("");
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const query = "xasedrgnyffg";
+  const tempQuery = "interstellar";
 
   useEffect(function() {
       async function fetchMovies() {
           try {
               setIsLoading(true);
-              const res = await fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=${API_KEY}&s=${query}`);
+              const res = await fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=${API_KEY}&s=${tempQuery}`);
               if (!res.ok) throw new Error("Something went wrong with fetching movies!");
 
               const data = await res.json();
@@ -74,7 +75,7 @@ export default function App() {
               // {Response: 'False', Error: 'Movie not found!'}
 
               setMovies(data.Search);
-              
+
               // console.log(movies);
               // []
               // Because the function is asynchronous, we get the stale state (empty array)
@@ -107,7 +108,7 @@ export default function App() {
   return (
       <>
         <NavBar>
-            <Search />
+            <Search query={query} setQuery={setQuery} />
             <NumResults movies={movies} />
         </NavBar>
         <Main>
@@ -151,7 +152,7 @@ function ErrorMessage({ message }) {
     );
 }
 
-function NavBar({children}) {
+function NavBar({ children }) {
     return (
         <nav className="nav-bar">
           <Logo />
@@ -177,9 +178,7 @@ function NumResults({ movies }) {
   );
 }
 
-function Search() {
-  const [query, setQuery] = useState("");
-
+function Search({ query, setQuery }) {
   return (
       <input
         className="search"
