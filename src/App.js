@@ -60,6 +60,30 @@ export default function App() {
   const [error, setError] = useState("");
   const tempQuery = "interstellar";
 
+  // Synchronize with no variable at all, not executed as re-render
+  useEffect(function() {
+      console.log("After initial render.");
+  }, []);
+
+  // No dependency array, synchronize with everything
+  useEffect(function() {
+      console.log("After every render.");
+  });
+
+  useEffect(function() {
+      console.log("Query just changes.");
+  }, [query]);
+
+  console.log("During render.");
+  // [1] Render
+  // During render.
+  // After initial render.
+  // After every render.
+  // [2] Re-render
+  // During render.
+  // After every render.
+  // Query just changes.
+
   useEffect(function() {
       async function fetchMovies() {
           try {
