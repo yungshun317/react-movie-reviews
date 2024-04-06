@@ -60,6 +60,7 @@ export default function App() {
   const [error, setError] = useState("");
   const tempQuery = "interstellar";
 
+  /*
   // Synchronize with no variable at all, not executed as re-render
   useEffect(function() {
       console.log("After initial render.");
@@ -83,12 +84,15 @@ export default function App() {
   // During render.
   // After every render.
   // Query just changes.
+  */
 
   useEffect(function() {
       async function fetchMovies() {
           try {
               setIsLoading(true);
-              const res = await fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=${API_KEY}&s=${tempQuery}`);
+              setError("");
+
+              const res = await fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=${API_KEY}&s=${query}`);
               if (!res.ok) throw new Error("Something went wrong with fetching movies!");
 
               const data = await res.json();
@@ -110,8 +114,15 @@ export default function App() {
               setIsLoading(false);
           }
       }
+
+      if (!query.length) {
+          setMovies([]);
+          setError("");
+          return;
+      }
+
       fetchMovies();
-  }, []);
+  }, [query]);
   /*
   console.log(data.Search);
   (10) [{…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}, {…}]
