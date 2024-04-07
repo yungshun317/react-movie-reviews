@@ -58,7 +58,7 @@ export default function App() {
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const tempQuery = "interstellar";
+  const [selectedId, setSelectedId] = useState(null);
 
   /*
   // Synchronize with no variable at all, not executed as re-render
@@ -85,6 +85,10 @@ export default function App() {
   // After every render.
   // Query just changes.
   */
+
+  function handleSelectMovie(id) {
+      setSelectedId(id);
+  }
 
   useEffect(function() {
       async function fetchMovies() {
@@ -150,12 +154,18 @@ export default function App() {
             <Box>
                 { /* {isLoading ? <Loader /> : <MovieList movies={movies} />} */ }
                 {isLoading && <Loader />}
-                {!isLoading && !error && <MovieList movies={movies} />}
+                {!isLoading && !error && <MovieList movies={movies} onSelectMovie={handleSelectMovie} />}
                 {error && <ErrorMessage message={error} />}
             </Box>
             <Box>
-                <WatchedSummary watched={watched} />
-                <WatchedMovieList watched={watched} />
+                {
+                    selectedId ?
+                        <MovieDetails selectedId={selectedId} /> :
+                        <>
+                            <WatchedSummary watched={watched} />
+                            <WatchedMovieList watched={watched} />
+                        </>
+                }
             </Box>
             {
                 /*
@@ -248,37 +258,19 @@ function Box({ children }) {
     );
 }
 
-/*
-function ListBox({ children }) {
-  const [isOpen1, setIsOpen1] = useState(true);
-
+function MovieList({ movies, onSelectMovie }) {
   return (
-      <div className="box">
-        <button
-            className="btn-toggle"
-            onClick={() => setIsOpen1((open) => !open)}
-        >
-          {isOpen1 ? "–" : "+"}
-        </button>
-        {isOpen1 && children}
-      </div>
-  );
-}
-*/
-
-function MovieList({ movies }) {
-  return (
-      <ul className="list">
+      <ul className="list list-movies">
         {movies?.map((movie) => (
-            <Movie movie={movie} key={movie.imdbID} />
+            <Movie movie={movie} key={movie.imdbID} onSelectMovie={onSelectMovie} />
         ))}
       </ul>
   );
 }
 
-function Movie({ movie }) {
+function Movie({ movie, onSelectMovie }) {
   return (
-      <li key={movie.imdbID}>
+      <li key={movie.imdbID} onClick={() => onSelectMovie(movie.imdbID)}>
         <img src={movie.Poster} alt={`${movie.Title} poster`}/>
         <h3>{movie.Title}</h3>
         <div>
@@ -291,30 +283,11 @@ function Movie({ movie }) {
   );
 }
 
-/*
-function WatchedBox() {
-  const [watched, setWatched] = useState(tempWatchedData);
-  const [isOpen2, setIsOpen2] = useState(true);
-
-  return (
-      <div className="box">
-        <button
-            className="btn-toggle"
-            onClick={() => setIsOpen2((open) => !open)}
-        >
-          {isOpen2 ? "–" : "+"}
-        </button>
-
-        {isOpen2 && (
-            <>
-              <WatchedSummary watched={watched} />
-              <WatchedMovieList watched={watched} />
-            </>
-        )}
-      </div>
-  );
+function MovieDetails({ selectedId }) {
+    return (
+        <div className="details">{selectedId}</div>
+    );
 }
-*/
 
 function WatchedSummary({ watched }) {
   const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
