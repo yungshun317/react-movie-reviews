@@ -95,6 +95,10 @@ export default function App() {
       setSelectedId(null);
   }
 
+  function handleAddWatched(movie) {
+      setWatched(watched => [...watched, movie]);
+  }
+
   useEffect(function() {
       async function fetchMovies() {
           try {
@@ -165,7 +169,11 @@ export default function App() {
             <Box>
                 {
                     selectedId ?
-                        <MovieDetails selectedId={selectedId} onCloseMovie={handleCloseMovie} /> :
+                        <MovieDetails
+                            selectedId={selectedId}
+                            onCloseMovie={handleCloseMovie}
+                            onAddWatched={handleAddWatched}
+                        /> :
                         <>
                             <WatchedSummary watched={watched} />
                             <WatchedMovieList watched={watched} />
@@ -288,7 +296,7 @@ function Movie({ movie, onSelectMovie }) {
   );
 }
 
-function MovieDetails({ selectedId, onCloseMovie }) {
+function MovieDetails({ selectedId, onCloseMovie, onAddWatched }) {
     const [movie, setMovie] = useState({});
     const [isLoading, setIsLoading] = useState(false);
 
@@ -304,6 +312,18 @@ function MovieDetails({ selectedId, onCloseMovie }) {
         Director: director,
         Genre: genre,
     } = movie;
+
+    function handleAdd() {
+        const newWatchedMovie = {
+            imdbID: selectedId,
+            title,
+            year,
+            poster,
+            imdbRating: Number(imdbRating),
+            runtime: Number(runtime.split(" ").at(0))
+        }
+        onAddWatched(newWatchedMovie);
+    }
 
     useEffect(function() {
         async function getMovieDetails() {
@@ -373,6 +393,8 @@ function MovieDetails({ selectedId, onCloseMovie }) {
                     <section>
                         <div className="rating">
                             <StarRating maxRating={10} size={24} />
+                            <button className="btn-add" onClick={handleAdd}>+ Add to List
+                            </button>
                         </div>
                         <p>
                             <em>{plot}</em>
