@@ -288,6 +288,50 @@ function Movie({ movie, onSelectMovie }) {
 }
 
 function MovieDetails({ selectedId, onCloseMovie }) {
+    const [movie, setMovie] = useState({});
+
+    useEffect(function() {
+        async function getMovieDetails() {
+            const res = await fetch(
+                `http://www.omdbapi.com/?apikey=${API_KEY}&i=${selectedId}`
+            );
+            const data = await res.json();
+            setMovie(data);
+
+            // console.log(data);
+            /*
+            {Title: 'Interstellar', Year: '2014', Rated: 'PG-13', Released: '07 Nov 2014', Runtime: '169 min', ...}
+                Actors: "Matthew McConaughey, Anne Hathaway, Jessica Chastain"
+                Awards: "Won 1 Oscar. 44 wins & 148 nominations total"
+                BoxOffice: "$188,020,017"
+                Country: "United States, United Kingdom, Canada"
+                DVD: "24 May 2016"
+                Director: "Christopher Nolan"
+                Genre: "Adventure, Drama, Sci-Fi"
+                Language: "English"
+                Metascore: "74"
+                Plot: "When Earth becomes uninhabitable in the future, a farmer and ex-NASA pilot, Joseph Cooper, is tasked to pilot a spacecraft, along with a team of researchers, to find a new planet for humans."
+                Poster: "https://m.media-amazon.com/images/M/MV5BZjdkOTU3MDktN2IxOS00OGEyLWFmMjktY2FiMmZkNWIyODZiXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_SX300.jpg"
+                Production: "N/A"
+                Rated: "PG-13"
+                Ratings: (3) [{…}, {…}, {…}]
+                Released: "07 Nov 2014"
+                Response: "True"
+                Runtime: "169 min"
+                Title: "Interstellar"
+                Type: "movie"
+                Website: "N/A"
+                Writer: "Jonathan Nolan, Christopher Nolan"
+                Year: "2014"
+                imdbID: "tt0816692"
+                imdbRating: "8.7"
+                imdbVotes: "2,071,776"
+                [[Prototype]]: Object
+            */
+        }
+        getMovieDetails();
+    }, []);
+
     return (
         <div className="details">
             <button className="btn-back" onClick={onCloseMovie}>
