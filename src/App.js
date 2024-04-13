@@ -386,6 +386,12 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
     useEffect(function() {
         if (!title) return;
         document.title = `Movie | ${title}`;
+
+        return function () {
+            document.title = "React Movie Reviews";
+            // A closure means a function will always remember all the variables that were present at the time and the place that function was created
+            console.log(`Cleanup Effect for Movie ${title}.`)
+        };
     }, [title]);
 
     return (
