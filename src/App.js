@@ -104,12 +104,14 @@ export default function App() {
   }
 
   useEffect(function() {
+      const controller = new AbortController();
+
       async function fetchMovies() {
           try {
               setIsLoading(true);
               setError("");
 
-              const res = await fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=${API_KEY}&s=${query}`);
+              const res = await fetch(`http://www.omdbapi.com/?i=tt3896198&apikey=${API_KEY}&s=${query}`, { signal: controller.signal });
               if (!res.ok) throw new Error("Something went wrong with fetching movies!");
 
               const data = await res.json();
@@ -120,13 +122,17 @@ export default function App() {
               // {Response: 'False', Error: 'Movie not found!'}
 
               setMovies(data.Search);
+              setError("");
 
               // console.log(movies);
               // []
               // Because the function is asynchronous, we get the stale state (empty array)
           } catch (err) {
               console.error(err.message);
-              setError(err.message);
+
+              if (err.name !== "AbortError") {
+                  setError(err.message);
+              }
           } finally {
               setIsLoading(false);
           }
@@ -139,6 +145,10 @@ export default function App() {
       }
 
       fetchMovies();
+
+      return function() {
+          controller.abort();
+      }
   }, [query]);
   /*
   console.log(data.Search);
