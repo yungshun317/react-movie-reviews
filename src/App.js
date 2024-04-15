@@ -335,6 +335,29 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
         Genre: genre,
     } = movie;
 
+    // [1] Inside conditionals
+    // if (imdbRating > 8) [isTop, setIsTop] = useState(true);
+
+    // [2] After an early return. Cannot guarantee all the hooks are always in the same order
+    // if (imdbRating > 8) return <p>Greatest ever!</p>
+
+    // [3] Only look at the initial state on the initial render. So when the component first mounts
+    /*
+    const [isTop, setIsTop] = useState(imdbRating > 8);
+    console.log(isTop);
+    // false
+    // Fix with `useEffect`
+    useEffect(function() {
+        setIsTop(imdbRating > 8);
+    }, [imdbRating]);
+    */
+    // Just use `const`
+    const isTop = imdbRating > 8;
+    console.log(isTop);
+    // true
+
+    // const [avgRating, setAvgRating] = useState(0);
+
     function handleAdd() {
         const newWatchedMovie = {
             imdbID: selectedId,
@@ -347,6 +370,15 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
         }
         onAddWatched(newWatchedMovie);
         onCloseMovie();
+
+        // [1] Update asynchronously
+        // setAvgRating(Number(imdbRating));
+        // console.log(avgRating);
+        // 0
+        // Stale state, wrong average
+        // setAvgRating((avgRating + userRating) / 2);
+        // [2] Fix with a callback function
+        // setAvgRating((avgRating) => (avgRating + userRating) / 2);
     }
 
     useEffect(function() {
@@ -440,6 +472,9 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
                             </p>
                         </div>
                     </header>
+
+                    { /* <p>{avgRating}</p> */ }
+
                     <section>
                         <div className="rating">
                             {
