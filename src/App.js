@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useState, useRef} from "react";
 import StarRating from "./StarRating";
 
 const tempMovieData = [
@@ -265,6 +265,22 @@ function NumResults({ movies }) {
 }
 
 function Search({ query, setQuery }) {
+  /*
+  useEffect(function() {
+      const el = document.querySelector(".search");
+      console.log(el);
+      // <input class="search" type="text" placeholder="Search movies..." value>
+      el.focus();
+  }, []);
+  */
+  const inputEl = useRef(null);
+
+  useEffect(function() {
+      console.log(inputEl.current);
+      // <input class="search" type="text" placeholder="Search movies..." value>
+      inputEl.current.focus();
+  }, []);
+
   return (
       <input
         className="search"
@@ -272,6 +288,7 @@ function Search({ query, setQuery }) {
         placeholder="Search movies..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
+        ref={inputEl}
       />
   );
 }
