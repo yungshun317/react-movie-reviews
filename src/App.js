@@ -276,9 +276,19 @@ function Search({ query, setQuery }) {
   const inputEl = useRef(null);
 
   useEffect(function() {
-      console.log(inputEl.current);
+      // console.log(inputEl.current);
       // <input class="search" type="text" placeholder="Search movies..." value>
-      inputEl.current.focus();
+
+      function callback(e) {
+          if (e.code === "Enter") {
+              inputEl.current.focus();
+              setQuery("");
+          }
+      }
+
+      document.addEventListener("keydown", callback);
+
+      return () => document.addEventListener("keydown", callback);
   }, []);
 
   return (
