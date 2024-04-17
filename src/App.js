@@ -2,6 +2,7 @@ import {useEffect, useState, useRef} from "react";
 import StarRating from "./StarRating";
 import {useMovies} from "./useMovies";
 import {useLocalStorageState} from "./useLocalStorageState";
+import {useKey} from "./useKey";
 
 const tempMovieData = [
     {
@@ -373,20 +374,7 @@ function MovieDetails({selectedId, onCloseMovie, onAddWatched, watched}) {
         // setAvgRating((avgRating) => (avgRating + userRating) / 2);
     }
 
-    useEffect(function () {
-        function callback(e) {
-            if (e.code === "Escape") {
-                onCloseMovie();
-                console.log("Closing.")
-            }
-        }
-
-        document.addEventListener("keydown", callback);
-
-        return function () {
-            document.removeEventListener("keydown", callback);
-        }
-    }, [onCloseMovie]);
+    useKey("Escape", onCloseMovie);
 
     useEffect(function () {
         async function getMovieDetails() {
