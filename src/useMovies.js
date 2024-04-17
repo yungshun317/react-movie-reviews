@@ -1,14 +1,16 @@
 import {useEffect, useState} from "react";
+import {useLocalStorageState} from "./useLocalStorageState";
 
 const API_KEY = "47335132";
 
-export function useMovies(query, callback) {
+export function useMovies(query) {
     const [movies, setMovies] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
+    const [watched, setWatched] = useLocalStorageState([]);
 
     useEffect(function () {
-        callback?.();
+        // callback?.();
 
         const controller = new AbortController();
 

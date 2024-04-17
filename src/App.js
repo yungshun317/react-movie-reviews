@@ -1,6 +1,7 @@
 import {useEffect, useState, useRef} from "react";
 import StarRating from "./StarRating";
 import {useMovies} from "./useMovies";
+import {useLocalStorageState} from "./useLocalStorageState";
 
 const tempMovieData = [
     {
@@ -57,12 +58,8 @@ const API_KEY = "47335132";
 export default function App() {
     const [query, setQuery] = useState("");
     const [selectedId, setSelectedId] = useState(null);
-    const {movies, isLoading, error} = useMovies(query, handleCloseMovie);
-
-    const [watched, setWatched] = useState(function () {
-        const storedValue = localStorage.getItem("watched");
-        return JSON.parse(storedValue);
-    });
+    const {movies, isLoading, error} = useMovies(query);
+    const [watched, setWatched] = useLocalStorageState([], "watched");
 
     /*
     // Synchronize with no variable at all, not executed as re-render
@@ -107,10 +104,6 @@ export default function App() {
     function handleDeleteWatched(id) {
         setWatched(watched => watched.filter(movie => movie.imdbID !== id));
     }
-
-    useEffect(function () {
-        localStorage.setItem("watched", JSON.stringify(watched));
-    }, [watched])
 
     /*
       console.log(data.Search);
